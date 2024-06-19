@@ -22,7 +22,7 @@ public class latihanbuku {
             System.out.println("2. Update Data");
             System.out.println("3. Hapus Data");
             System.out.println("4. Tampilkan Data");
-            System.out.println("5. Keluar");
+            System.out.println("5. Keluar Dari Program");
             System.out.print("Masukkan Opsi Pilihan: ");
             
             int choice = getInputInt(scanner);
@@ -33,8 +33,8 @@ public class latihanbuku {
                 case 2: update(scanner); break;
                 case 3: delete(scanner); break;
                 case 4: show(); break;
-                case 5: System.out.println("Exiting..."); scanner.close(); return;
-                default: System.out.println("Invalid choice. Try again.");
+                case 5: System.out.println("Program Ditutup, Terimakasih Sudah Menggunakan Program ^w^ "); scanner.close(); return;
+                default: System.out.println("Input Yang Dimasukkan Tidak Valid. Tolong Masukkan Input Yang Benar.");
             }
         }
     }
@@ -44,7 +44,7 @@ public class latihanbuku {
             try {
                 return scanner.nextInt();
             } catch (InputMismatchException e) {
-                System.out.println("Input yang dimasukkan tidak valid. Tolong masukkan input yang benar.");
+                System.out.println("Input Yang Dimasukkan Tidak Valid. Tolong Masukkan Input Yang Benar.");
                 scanner.next(); // Clear invalid input
             }
         }
@@ -64,20 +64,22 @@ public class latihanbuku {
     public static void insert(Scanner scanner) {
         try {
             connect();
-            System.out.print("Masukkan ID Buku: ");
+            System.out.println("");
+            System.out.print("Masukkan ID Buku : "); //input ID Buku
             int id = getInputInt(scanner);
-            scanner.nextLine(); // Consume newline
-            
-            System.out.print("Judul Buku: ");
+            scanner.nextLine(); // Consume newline 
+            System.out.print("Judul Buku : "); //input judul buku
             String judul_buku = scanner.nextLine();
-            System.out.print("Tahun: ");
+            System.out.print("Tahun Buku : "); //input dari tahun pembuatan buku
             int tahun = getInputInt(scanner);
-            System.out.print("Stok: ");
+            System.out.print("Stok Buku : "); //input stok dari buku
             int stok = getInputInt(scanner);
             scanner.nextLine(); // Consume newline
-            System.out.print("Penulis: ");
+            System.out.print("Penulis Buku : "); //input penulsi dari buku
             String penulis = scanner.nextLine();
+            System.out.println("");
             
+            // SQL Command untuk memasukkan data ke dalam database ke Tabel buku
             String sql = "INSERT INTO buku (id, judul_buku, tahun, stok, penulis) VALUES (?, ?, ?, ?, ?)";
             ps = conn.prepareStatement(sql);
             ps.setInt(1, id);
@@ -87,6 +89,7 @@ public class latihanbuku {
             ps.setString(5, penulis);
             ps.execute();
             
+            // SQL Command untuk memasukkan data ke dalam database ke Tabel Penulis
             sql = "INSERT INTO penulis (id, nama_penulis) VALUES (?, ?)";
             ps = conn.prepareStatement(sql);
             ps.setInt(1, id);
@@ -94,6 +97,7 @@ public class latihanbuku {
             ps.execute();
             
             System.out.println("Data telah sukses dimasukkan ke database.");
+            System.out.println("");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -114,12 +118,14 @@ public class latihanbuku {
             rs = ps.executeQuery();
             
             if (rs.next()) {
-                System.out.println("Data saat ini:");
-                System.out.println("ID Buku: " + rs.getInt("id"));
-                System.out.println("Judul Buku: " + rs.getString("judul_buku"));
-                System.out.println("Tahun: " + rs.getInt("tahun"));
-                System.out.println("Stok: " + rs.getInt("stok"));
-                System.out.println("Penulis: " + rs.getString("penulis"));
+                System.out.println("");
+                System.out.println("Data saat ini :");
+                System.out.println("ID Buku : " + rs.getInt("id"));
+                System.out.println("Judul Buku : " + rs.getString("judul_buku"));
+                System.out.println("Tahun : " + rs.getInt("tahun"));
+                System.out.println("Stok : " + rs.getInt("stok"));
+                System.out.println("Penulis : " + rs.getString("penulis"));
+                System.out.println("");
                 
                 System.out.print("Masukkan Judul Buku baru (kosongkan jika tidak ingin mengubah): ");
                 String judul_buku = scanner.nextLine();
@@ -137,6 +143,7 @@ public class latihanbuku {
                 String penulisStr = scanner.nextLine();
                 String penulis = penulisStr.isEmpty() ? rs.getString("penulis") : penulisStr;
                 
+                // SQL Command memasukkan update data ke database pada Tabel buku
                 sql = "UPDATE buku SET judul_buku = ?, tahun = ?, stok = ?, penulis = ? WHERE id = ?";
                 ps = conn.prepareStatement(sql);
                 ps.setString(1, judul_buku);
@@ -146,6 +153,7 @@ public class latihanbuku {
                 ps.setInt(5, id);
                 ps.execute();
                 
+                // SQL Command memasukkan update data ke database pada Tabel penulis
                 sql = "UPDATE penulis SET nama_penulis = ? WHERE id = ?";
                 ps = conn.prepareStatement(sql);
                 ps.setString(1, penulis);
@@ -154,7 +162,7 @@ public class latihanbuku {
                 
                 System.out.println("Data berhasil di update.");
             } else {
-                System.out.println("No data tidak ditemukan dengan ID buku : " + id);
+                System.out.println("Id Buku tidak sapat ditemukan : " + id);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -166,10 +174,11 @@ public class latihanbuku {
     public static void delete(Scanner scanner) {
         try {
             connect();
-            System.out.print("Masukkan ID Buku yang ingin dihapus: ");
+            System.out.print("Masukkan ID Buku yang ingin dihapus : ");
             int id = getInputInt(scanner);
             scanner.nextLine(); // Consume newline
             
+            //SQL Command Dari Hapus isi tabel database
             String sql = "DELETE FROM buku WHERE id = ?";
             ps = conn.prepareStatement(sql);
             ps.setInt(1, id);
@@ -180,9 +189,9 @@ public class latihanbuku {
                 ps.setInt(1, id);
                 ps.executeUpdate();
                 
-                System.out.println("Data deleted successfully.");
+                System.out.println("Data Berhasil Di Hapus.");
             } else {
-                System.out.println("No data found with ID Buku: " + id);
+                System.out.println("Id Buku Tidak Dapat Ditemukan : " + id);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -200,12 +209,13 @@ public class latihanbuku {
             rs = ps.executeQuery();
             int i = 1;
             while (rs.next()) {
-                System.out.println("\nData ke-" + i);
-                System.out.println("ID Buku: " + rs.getInt("id"));
-                System.out.println("Judul Buku: " + rs.getString("judul_buku"));
-                System.out.println("Tahun: " + rs.getInt("tahun"));
-                System.out.println("Stok: " + rs.getInt("stok"));
-                System.out.println("Penulis: " + rs.getString("nama_penulis"));
+                System.out.println("");
+                System.out.println("Data ke-" + i);
+                System.out.println("ID Buku : " + rs.getInt("id"));
+                System.out.println("Judul Buku : " + rs.getString("judul_buku"));
+                System.out.println("Tahun : " + rs.getInt("tahun"));
+                System.out.println("Stok : " + rs.getInt("stok"));
+                System.out.println("Penulis : " + rs.getString("nama_penulis"));
                 i++;
             }
         } catch (Exception e) {
