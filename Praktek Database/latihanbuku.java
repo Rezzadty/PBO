@@ -87,7 +87,13 @@ public class latihanbuku {
             ps.setString(5, penulis);
             ps.execute();
             
-            System.out.println("Data telah sukses dimasukkan ke database .");
+            sql = "INSERT INTO penulis (id, nama_penulis) VALUES (?, ?)";
+            ps = conn.prepareStatement(sql);
+            ps.setInt(1, id);
+            ps.setString(2, penulis);
+            ps.execute();
+            
+            System.out.println("Data telah sukses dimasukkan ke database.");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -140,6 +146,12 @@ public class latihanbuku {
                 ps.setInt(5, id);
                 ps.execute();
                 
+                sql = "UPDATE penulis SET nama_penulis = ? WHERE id = ?";
+                ps = conn.prepareStatement(sql);
+                ps.setString(1, penulis);
+                ps.setInt(2, id);
+                ps.execute();
+                
                 System.out.println("Data berhasil di update.");
             } else {
                 System.out.println("No data tidak ditemukan dengan ID buku : " + id);
@@ -163,6 +175,11 @@ public class latihanbuku {
             ps.setInt(1, id);
             int rows = ps.executeUpdate();
             if (rows > 0) {
+                sql = "DELETE FROM penulis WHERE id = ?";
+                ps = conn.prepareStatement(sql);
+                ps.setInt(1, id);
+                ps.executeUpdate();
+                
                 System.out.println("Data deleted successfully.");
             } else {
                 System.out.println("No data found with ID Buku: " + id);
@@ -177,7 +194,8 @@ public class latihanbuku {
     public static void show() {
         try {
             connect();
-            String sql = "SELECT * FROM buku";
+            String sql = "SELECT b.id, b.judul_buku, b.tahun, b.stok, p.nama_penulis " +
+                         "FROM buku b LEFT JOIN penulis p ON b.id = p.id";
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
             int i = 1;
@@ -187,7 +205,7 @@ public class latihanbuku {
                 System.out.println("Judul Buku: " + rs.getString("judul_buku"));
                 System.out.println("Tahun: " + rs.getInt("tahun"));
                 System.out.println("Stok: " + rs.getInt("stok"));
-                System.out.println("Penulis: " + rs.getString("penulis"));
+                System.out.println("Penulis: " + rs.getString("nama_penulis"));
                 i++;
             }
         } catch (Exception e) {
