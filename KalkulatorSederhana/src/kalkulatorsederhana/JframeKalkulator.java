@@ -12,7 +12,7 @@ import javax.swing.ImageIcon;
  * NIM : A11.2022.14201
  * Kelas : A11.4406
  */
-public class JframeKalkulator extends javax.swing.JFrame {
+public class Kalkulator extends javax.swing.JFrame {
 
     /**
      * Creates new form JframeKalkulator
@@ -23,33 +23,42 @@ public class JframeKalkulator extends javax.swing.JFrame {
     double ans, angka;
     int operator,flag=0;
     
-    public void calculation(){
-        
+    public void Kalkulasi(){
         switch(operator){
-            case 1:
-                ans= angka + Double.parseDouble(tampilangkainput.getText());
-                tampilangkainput.setText(Double.toString(ans));
-                break;
+        case 1:
+            ans = angka + Double.parseDouble(tampilangkainput.getText());
+            tampilangkainput.setText(Double.toString(ans));
+            break;
                 
-            case 2:
-                ans= angka - Double.parseDouble(tampilangkainput.getText());
-                tampilangkainput.setText(Double.toString(ans));
-                break;
+        case 2:
+            ans = angka - Double.parseDouble(tampilangkainput.getText());
+            tampilangkainput.setText(Double.toString(ans));
+            break;
                   
-            case 3:
-                ans= angka * Double.parseDouble(tampilangkainput.getText());
-                tampilangkainput.setText(Double.toString(ans));
-                break;
+        case 3:
+            ans = angka * Double.parseDouble(tampilangkainput.getText());
+            tampilangkainput.setText(Double.toString(ans));
+            break;
                 
-            case 4:
-                ans= angka / Double.parseDouble(tampilangkainput.getText());
+        case 4:
+            double secondAngkaDiv = Double.parseDouble(tampilangkainput.getText());
+            if (secondAngkaDiv != 0) {
+                ans = angka / secondAngkaDiv;
                 tampilangkainput.setText(Double.toString(ans));
-                break;
+            } else {
+                tampilangkainput.setText("Error"); // Handle division by zero error
+            }
+            break;
                 
-            case 5:
-                ans= angka / Double.parseDouble(tampilangkainput.getText());
+        case 5:
+            double secondAngkaMod = Double.parseDouble(tampilangkainput.getText());
+            if (secondAngkaMod != 0) {
+                ans = angka % secondAngkaMod;
                 tampilangkainput.setText(Double.toString(ans));
-                break;
+            } else {
+                tampilangkainput.setText("Error"); // Handle division by zero error
+            }
+            break;
         }
     }
 
@@ -333,7 +342,7 @@ public class JframeKalkulator extends javax.swing.JFrame {
 
     private void buttonsamadenganActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonsamadenganActionPerformed
         // TODO add your handling code here:
-        calculation();
+        Kalkulasi();
         flag=1;
         tampilangkaoutput.setText("");
         ans=0;
@@ -467,7 +476,7 @@ public class JframeKalkulator extends javax.swing.JFrame {
             angka= Double.parseDouble(tampilangkainput.getText());
             operator=5;
             tampilangkainput.setText("");
-            tampilangkaoutput.setText(angka + "%");
+            tampilangkaoutput.setText(angka + " mod ");
         }
     }//GEN-LAST:event_buttonmodulusActionPerformed
 
